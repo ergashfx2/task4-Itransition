@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Home - My Website{% endblock %}
+
+{% block content %}
+<section class="intro mt-4">
+    <div class="bg-image h-100" style="background-color: #f5f7fa;">
+      <div class="mask d-flex align-items-center h-100">
+        <div class="container">
+          <div class="row justify-content-center">
+            <div class="col-12">
+              <div class="card">
+                <div class="card-body p-0">
+                  <div class="table-responsive table-scroll" data-mdb-perfect-scrollbar="true" style="position: relative; height: 700px">
+                    <table class="table table-striped mb-0">
+                      <thead style="background-color: #3e82e9;">
+                          <tr>
+                              <th scope="col">ID</th>
+                              <th scope="col">Username</th>
+                              <th scope="col">Name</th>
+                              <th scope="col">Email</th>
+                              <th scope="col">Status</th>
+                              <th scope="col" class="pr-lg-2">Action</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          {% for user in users %}
+                          <tr> <td>{{user[1]}}</td>
+                              <td>{{user[2]}}</td> 
+                              <td>{{user[0]}}</td>
+                              <td>{{user[3]}}</td>
+                              <td>{{user[5]}}</td>
+                              <td><button id="{{ user[3] }}" class="btn btn-danger btn-lg mx-1 delete-button"><i class="bi bi-trash "></i></button>
+                                {% if user[5] == 'Active' %}
+                                <button id="{{ user[3] }}" class="btn btn-light btn-lg mx-1 button2"><i class="bi bi-lock-fill bi-7x"></i></button>
+                            {% else %}
+                                <button id="{{ user[3] }}" class="btn btn-light btn-lg mx-1 button2"><i class="bi bi-unlock-fill"></i></button>
+                            {% endif %}                            
+                              </td>
+                          </tr>
+                          {% endfor %}
+                      </tbody>
+                  </table>
+                  
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+{% endblock content %}
