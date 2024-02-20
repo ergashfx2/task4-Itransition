@@ -115,7 +115,12 @@ function handleLoginFormSubmit(event) {
             alert('Login was successful!');
             window.location.href = '/';
         } else {
-            alert('Login failed. Please try again.');
+            response.text().then(errorMessage => {
+                alert('Login failed.' + JSON.parse(errorMessage).message);
+            }).catch(error => {
+                console.error('Error:', error);
+                alert('Login failed. Please try again.');
+            });
         }
     })
     .catch(error => {
@@ -136,10 +141,16 @@ function handleRegisterFormSubmit(event) {
             alert('Registration was successful!');
             window.location.href = '/';
         } else {
-            alert('Registration failed. Please try again.');
+            response.text().then(errorMessage => {
+                alert('Registration failed.' + JSON.parse(errorMessage).message);
+            }).catch(error => {
+                console.error('Error:', error);
+                alert('Registration failed. Please try again.');
+            });
         }
     })
     .catch(error => {
         console.error('Error:', error);
     });
 }
+

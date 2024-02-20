@@ -45,6 +45,11 @@ class Database:
         result = self.execute(sql=sql, parameters=(email,),fetchall=True)
         return result
     
+    def select_user_by_username(self, username):
+        sql = "SELECT * FROM Users WHERE username = ?"
+        result = self.execute(sql=sql, parameters=(username,),fetchall=True)
+        return result
+    
     def block_user(self, email):
             sql = "UPDATE Users SET status = 'Blocked' WHERE email = ?"
             self.execute(sql, parameters=(email,),commit=True)

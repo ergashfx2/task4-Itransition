@@ -1,13 +1,13 @@
 from database import Database
-from flask import Flask, redirect, render_template, request, session, url_for
+from flask import Flask, jsonify, redirect, render_template, request, session, url_for
 from werkzeug.security import generate_password_hash,check_password_hash
+from password_checking import check_password_strength
 
 app = Flask(__name__)
 import sqlite3
 con = sqlite3.connect("main.db") 
 db = Database()
 app.secret_key = 'key'
-
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -40,10 +40,21 @@ def create_user():
     email = request.form['email']
     password = request.form['password']
     hashed_password = generate_password_hash(password)
-    db.create_user(username=username,name=name,email=email,password=hashed_password)
-    session['logged_in'] = True
-    session['email'] = email
-    return redirect(url_for('index'))
+    user = db.select_user(email=email)
+    user_username = db.select_user_by_username(username=username)
+    is_strong, message = check_password_strength(password)
+    if user:
+        return jsonify({'message': 'This user already registered Please try again.'}), 400
+    elif user_username :
+        return jsonify({'message': 'Username already taken.!'}), 400
+    elif not is_strong :
+            return jsonify({'is_strong': is_strong, 'message': message}),400
+    else :
+        db.create_user(username=username,name=name,email=email,password=hashed_password)
+        session['logged_in'] = True
+        session['email'] = email
+        return jsonify({'message': 'Registration successful'}), 200
+
 
 @app.route('/block_user', methods=['POST'])
 def block_user():
@@ -80,12 +91,12 @@ def login_user():
     if user and check_password_hash(user[0][4], password):
         session['logged_in'] = True
         session['email'] = email
-        return "ok"
+        return jsonify({'message': 'Registration successful'}), 200
     else:
-        return "unauthorized"
+        return jsonify({'message': 'Incorrect email or password'}), 400
 
     
 
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5000, debug=False)
+    app.run(debug=True)
