@@ -2,7 +2,7 @@ import sqlite3
 
 
 class Database:
-    def __init__(self, path_to_db="main.db"):
+    def __init__(self, path_to_db="/home/user122/task4-Itransition/main.db"):
         self.path_to_db = path_to_db
 
     @property
